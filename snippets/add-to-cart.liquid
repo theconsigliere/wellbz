@@ -1,20 +1,38 @@
-<form action="/cart/add" enctype="multipart/form-data" id="AddToCartForm" method="post">
+<form
+    action="/cart/add" enctype="multipart/form-data" id="AddToCartForm" method="post">
 
 
-    {% for variant in product.variants %}
-        <!-- as we are in a forloop, we can look for forloop property and get .index property out of it ie variant-1, variant-2 etc -->
-        <!-- assigned to variant.id so form knows what we are selecting -->
-        <input
-        type="radio" name='id' id='variant-{{ forloop.index }}' value='{{ variant.id }}'> <!-- assigned to forloop makes label clickable -->
-        <label for="variant-{{ for.loop.index }}">{{ variant.title }}</label>
-    {% endfor %}
+    <!-- if we have items with variants show radio buttons, if not do not display -->
+    {% if product.variants.size > 1 %}
+        {% for variant in product.variants %}
+            <!-- as we are in a forloop, we can look for forloop property and get .index property out of it ie variant-1, variant-2 etc -->
+            <!-- assigned to variant.id so form knows what we are selecting -->
+            <input
+            type="radio" name='id' id='variant-{{ forloop.index }}' value='{{ variant.id }}'> <!-- assigned to forloop makes label clickable -->
+            <label for="variant-{{ for.loop.index }}">{{ variant.title }}</label>
+        {% endfor %}
+    {% else %}
+        <!-- still pass value to form -->
+        <input type="hidden" name='id' value='{{ product.variants.first.id }}'>
+    {% endif %}
 
 
     {{ current_variant.price | money }}
 
 
     <label for="Quantity">quantity</label>
-    <input id="Quantity" min="1" name="quantity" type="number" value="1">
+    <!-- do not select quantity less than one -->
+    <input id="Quantity" min="1" class='js-quantity-field' name="quantity" type="number" value="1" {% if product.variants.size == 1 %} max='{{ product.variants.first.inventory_quantity }}' {% endif %}>
+
+    <button class="quantity-button minus js-quantity-button " disabled type='button'>
+        &ndash;
+    </button>
+
+    <span class="quantity-text js-quantity-text"></span>
+
+    <button class="quantity-button js-quantity-button plus" type='button'>
+        +
+    </button>
 
 
     <button id="AddToCart" name="add" type="submit">Add to cart</button>
