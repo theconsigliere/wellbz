@@ -47,6 +47,7 @@ $(document).ready(function() {
     //whenever our radio is changed we want to set the max of the quantity field to whatever the value of the data quantity is
     $quantity.attr("max", max);
     // if quantity value is  greater than the max, set the quantity value to the max and trigger a change event
+    // if we change value to 20 when we choose an option this will then become the highest value of the inventory ie 10
     if (parseInt($quantity.val()) > max) {
       $quantity.val(max).change();
     }
