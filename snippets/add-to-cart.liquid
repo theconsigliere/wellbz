@@ -8,7 +8,7 @@
             <!-- as we are in a forloop, we can look for forloop property and get .index property out of it ie variant-1, variant-2 etc -->
             <!-- assigned to variant.id so form knows what we are selecting -->
             <input
-            type="radio" name='id' id='variant-{{ forloop.index }}' value='{{ variant.id }}'> <!-- assigned to forloop makes label clickable -->
+            type="radio" class='js-variant-radio' name='id' id='variant-{{ forloop.index }}' value='{{ variant.id }}' data-inventory-quantity='{{ variant.inventory_quantity }}' {% unless variant.available %} disabled {% endunless %}> <!-- assigned to forloop makes label clickable -->
             <label for="variant-{{ for.loop.index }}">{{ variant.title }}</label>
         {% endfor %}
     {% else %}
@@ -34,6 +34,6 @@
         +
     </button>
 
-
-    <button id="AddToCart" name="add" type="submit">Add to cart</button>
+    <!-- logic conditional i -->
+    <button id="add-to-cart-button" name="add" type="submit">Add to cart</button>
 </form>

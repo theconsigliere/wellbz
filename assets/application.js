@@ -1,4 +1,4 @@
-// Put your applicaiton javascript here
+// Put your application javascript here
 
 $(document).ready(function() {
   $(document).on("click", ".js-quantity-button", function(event) {
@@ -7,8 +7,11 @@ $(document).ready(function() {
       $quantity = $form.find(".js-quantity-field"),
       quantityValue = parseInt($quantity.val()),
       max = $quantity.attr("max") ? parseInt($quantity.attr("max")) : null;
-
-    if ($button.hasClass("plus")) {
+    // if button has class of plus & we havent exceded the max or if the quantity we are increasing to is less than or equal to the max
+    if (
+      $button.hasClass("plus") &&
+      (max === null || quantityValue + 1 <= max)
+    ) {
       // do something for the plus click
       $quantity.val(quantityValue + 1).change();
     } else if ($button.hasClass("minus")) {
@@ -32,22 +35,20 @@ $(document).ready(function() {
       $minusButton.prop("disabled", false);
     }
   });
+
+  //change on radio select
+
+  $(document).on("change", ".js-variant-radio", function(event) {
+    let $radio = $(this),
+      $form = $radio.closest("form"),
+      max = $radio.attr("data-inventory-quantity"),
+      $quantity = $form.find(".js-quantity-field");
+
+    //whenever our radio is changed we want to set the max of the quantity field to whatever the value of the data quantity is
+    $quantity.attr("max", max);
+    // if quantity value is  greater than the max, set the quantity value to the max and trigger a change event
+    if (parseInt($quantity.val()) > max) {
+      $quantity.val(max).change();
+    }
+  });
 });
-
-// window.onload = function() {
-//   var jsButton = document.querySelectorAll(".js-quantity-button");
-//   var form = document.getElementById("AddToCartForm");
-//   var quantity = form.querySelector("js-quantity-field");
-//   var quantityValue = parseInt(quantity.val());
-//   var max = quantity.attr("max") ? parseInt(quantity.attr("max")) : null;
-
-//   jsButton.forEach(button => {
-//     button.addEventListener("click", () => {
-//       // alert("button clicked");
-//       if (jsButton.classList.contains(".plus")) {
-//         quantity.val(quantityValue + 1);
-//       } else if (jsButton.classList.contains(".minus")) {
-//       }
-//     });
-//   });
-// };
