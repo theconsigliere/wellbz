@@ -20,19 +20,30 @@ $(document).ready(function() {
     }
   });
 
+  // on change to number field
   $(document).on("change", ".js-quantity-field", function(event) {
     let $field = $(this),
       $form = $field.closest("form"),
       $quantityText = $form.find(".js-quantity-text"),
+      // if the quantity number is equal to 1
       shouldDisableMinus = parseInt(this.value) === 1,
+      shouldDisablePlus = parseInt(this.value) === parseInt($field.attr("max")),
       $minusButton = $form.find(".js-quantity-button.minus");
-
+    $plusButton = $form.find(".js-quantity-button.plus");
+    // change the text to the same as the js quantity field
     $quantityText.text(this.value);
 
     if (shouldDisableMinus) {
+      // find prop & intiate conditional statment in add-to-cart liquid
       $minusButton.prop("disabled", true);
     } else if ($minusButton.prop("disabled") === true) {
       $minusButton.prop("disabled", false);
+    }
+
+    if (shouldDisablePlus) {
+      $plusButton.prop("disabled", true);
+    } else if ($plusButton.prop("disabled") === true) {
+      $plusButton.prop("disabled", false);
     }
   });
 
@@ -43,6 +54,12 @@ $(document).ready(function() {
       $form = $radio.closest("form"),
       max = $radio.attr("data-inventory-quantity"),
       $quantity = $form.find(".js-quantity-field");
+    $addToCartButton = $form.find("#add-to-cart-button");
+
+    // on change to radio button if addtocartbutton equals true, we do have  we turn on the add to cart button
+    if ($addToCartButton.prop("disabled") === true) {
+      $addToCartButton.prop("disabled", false);
+    }
 
     //whenever our radio is changed we want to set the max of the quantity field to whatever the value of the data quantity is
     $quantity.attr("max", max);

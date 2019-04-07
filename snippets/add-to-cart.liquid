@@ -34,6 +34,6 @@
         +
     </button>
 
-    <!-- logic conditional i -->
-    <button id="add-to-cart-button" name="add" type="submit">Add to cart</button>
+    <!-- add ot cart button disabled, until jquery tells us we have a variant selected with stock  -->
+    <button id="add-to-cart-button" {% if product.variants.size > 1 %}disabled{% endif %} name="add" type="submit">Add to cart</button>
 </form>
