@@ -1,7 +1,10 @@
 // Put your application javascript here
 
 $(document).ready(function() {
-  $(document).on("click", ".js-quantity-button", function(event) {
+  //
+  //
+  //
+  let onQuantityButtonClick = function(event) {
     let $button = $(this),
       $form = $button.closest("form"),
       $quantity = $form.find(".js-quantity-field"),
@@ -18,10 +21,12 @@ $(document).ready(function() {
       // do something for minus click
       $quantity.val(quantityValue - 1).change();
     }
-  });
+  };
+  //
+  //
+  //
 
-  // on change to number field
-  $(document).on("change", ".js-quantity-field", function(event) {
+  let onQuantityFieldChange = function(event) {
     let $field = $(this),
       $form = $field.closest("form"),
       $quantityText = $form.find(".js-quantity-text"),
@@ -45,11 +50,12 @@ $(document).ready(function() {
     } else if ($plusButton.prop("disabled") === true) {
       $plusButton.prop("disabled", false);
     }
-  });
+  };
+  //
+  //
+  //
 
-  //change on radio select
-
-  $(document).on("change", ".js-variant-radio", function(event) {
+  let onVariantRadioChange = function(event) {
     let $radio = $(this),
       $form = $radio.closest("form"),
       max = $radio.attr("data-inventory-quantity"),
@@ -68,5 +74,14 @@ $(document).ready(function() {
     if (parseInt($quantity.val()) > max) {
       $quantity.val(max).change();
     }
-  });
+  };
+  //
+  //
+  //
+
+  $(document).on("click", ".js-quantity-button", onQuantityButtonClick);
+
+  $(document).on("change", ".js-quantity-field", onQuantityFieldChange);
+
+  $(document).on("change", ".js-variant-radio", onVariantRadioChange);
 });
