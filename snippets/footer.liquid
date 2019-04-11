@@ -1,19 +1,19 @@
 <footer class="footer-global">
 
-    <div class="footer-top">
+    <div class="footer-top grid">
 
         <ul class="product-list">
-            {{ 'footer.list.products' | t }}
+            <h4>{{ 'footer.list.products' | t }}</h4>
             {% for product in collections.frontpage.products limit:4 %}
                 <li>
-                    <a href="{{ product.url }}">{{ product.title }}</a>
+                    <a class='h2' href="{{ product.url }}">{{ product.title }}</a>
                 </li>
             {% endfor %}
         </ul>
 
 
         <ul class="contact-list">
-            {{ linklists.footer.title }}
+            <h4>{{ linklists.footer.title }}</h4>
 
             {% for link in linklists.footer.links %}
                 <li>
@@ -32,7 +32,7 @@
         </ul>
 
         <div class="about-us">
-            {{ 'general.about.title' | t }}
+            <h4>{{ 'general.about.title' | t }}</h4>
             <p>{{ 'general.about.description' | t }}</p>
         </div>
 
@@ -45,7 +45,7 @@
         <!-- store year date as variable -->
         {% assign copyright_date = 'now' | date: '%Y' %}
         <!-- output our translation with the date varialbe passed to it -->
-        <span>{{ 'footer.bottom.copyright' | t: date: copyright_date  }}</span>
+        <span class='h4'>{{ 'footer.bottom.copyright' | t: date: copyright_date  }}</span>
 
         <div class="social-links">
             <a href="{{ 'footer.social.facebook_url' | t }}" target="new">

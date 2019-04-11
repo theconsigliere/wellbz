@@ -37,6 +37,20 @@ $type-body-sm: 13px;
 $type-bold: 700;
 $type-book: 400;
 
+@mixin flex-space-between {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin spaced-caps {
+  text-transform: uppercase;
+  letter-spacing: 0.075em;
+  font-size: $type-body-sm;
+  font-weight: $type-bold;
+}
+
 //base
 
 * {
@@ -63,6 +77,91 @@ body {
   padding-top: $header-height + $offset-global;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  font-weight: $type-book;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul,
+ol {
+  list-style-type: none;
+}
+
+//styleguide
+
+h1,
+.h1,
+h2,
+.h2 {
+  font-family: $headline-font;
+  font-weight: $type-bold;
+  color: $light-black;
+}
+
+h1,
+.h1 {
+  font-size: $type-headline-lg;
+  line-height: $line-global * 3;
+}
+
+h2,
+.h2 {
+  font-size: $type-headline-med;
+  line-height: $line-global * 2;
+}
+
+h4 {
+  color: $light-black;
+}
+
+a {
+  color: $text-color;
+  &:hover {
+    opacity: 0.75;
+  }
+}
+
+p {
+  color: $text-color;
+  a {
+    border-bottom: $standard-border;
+    &:hover {
+      border-bottom-color: $black;
+    }
+  }
+}
+
+.text-link {
+  @include spaced-caps;
+  color: $light-black;
+}
+
+//utility classes
+
+.grid {
+  display: grid;
+  grid-column-gap: $gutter-global;
+  grid-row-gap: $gutter-global;
+
+  > * {
+    min-width: 0;
+    min-height: 0;
+  }
+}
+
 //header
 
 .header-global {
@@ -72,4 +171,52 @@ body {
   width: 100%;
   height: $header-height;
   background-color: $header-background-color;
+  padding: $line-global $offset-global;
+  @include flex-space-between;
+
+  .shop-link {
+    order: -1;
+  }
+
+  .cart-close-text {
+    display: none;
+  }
+}
+
+// footer
+
+.footer-global {
+  background-color: $footer-background-color;
+  margin-top: $offset-global;
+  border-top: $standard-border;
+
+  h4,
+  .h4 {
+    margin-bottom: $line-global;
+    @include spaced-caps;
+  }
+}
+
+.footer-top,
+.footer-bottom {
+  padding: $offset-global;
+}
+
+.footer-top {
+  grid-template-columns: 2fr 1fr 1fr;
+}
+
+.footer-bottom {
+  border-top: $standard-border;
+  @include flex-space-between;
+}
+
+.social-links {
+  a {
+    display: inline-block;
+
+    &:not(:last-child) {
+      margin-right: $line-global/2;
+    }
+  }
 }
