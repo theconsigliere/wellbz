@@ -1,39 +1,45 @@
 <div class='product-card'>
-    <div class="card-info">
+    <div class="card-inner grid collapse two-columns">
 
-        <a href="{{ product.url }}">
-            {{ product.title }}
-            <span class="price">{{ prodcut.price | money_without_trailing_zeros }}</span>
-        </a>
+        <div class="card-info product-info-section">
+            <a class='product-title' href="{{ product.url }}">
+                <h2>
+                    {{ product.title }}
+                    <span class="price accent-color">{{ product.price | money_without_trailing_zeros }}</span>
+                </h2>
+            </a>
 
-        <!-- this p tag takes the product desc, splits into arrays at the fullstop, takes the first array value then 'appends'  a fullstop at the end -->
-        <p>{{ product.description | strip_html | split: '.' | first | append: '.' }}</p>
+            <div
+                class="below-title">
+                <!-- this p tag takes the product desc, splits into arrays at the fullstop, takes the first array value then 'appends'  a fullstop at the end -->
+                <p>{{ product.description | strip_html | split: '.' | first | append: '.' }}</p>
 
-        <!-- only shows if we have more than 1 value -->
-        {% if product.variants.size > 1 %}
-            <!-- first we take the locale text which outputs {{ optionCount }} options, then we assign how many options we have with product.variants.size -->
-            {{ 'product.card.options' | t: optionCount: product.variants.size }}
-            &mdash;
-        {% endif %}
+                <!-- only shows if we have more than 1 value -->
+                {% if product.variants.size > 1 %}
+                    <!-- first we take the locale text which outputs {{ optionCount }} options, then we assign how many options we have with product.variants.size -->
+                    <span class="accent-color">
+                        {{ 'product.card.options' | t: optionCount: product.variants.size }}
+                        &mdash;</span>
 
-        <!-- see if product is available -->
-        {% if product.available %}
-            <a href="{{ product.url }}">{{ 'product.card.more_info' | t }}</a>
-        {% else %}
-            <!-- if not display sold out -->
-            {{ 'product.form.sold_out' | t }}
-        {% endif %}
+                {% endif %}
 
+                <!-- see if product is available -->
+                {% if product.available %}
+                    <a href="{{ product.url }}">{{ 'product.card.more_info' | t }}</a>
+                {% else %}
+                    <!-- if not display sold out -->
+                    {{ 'product.form.sold_out' | t }}
+                {% endif %}
+            </div>
 
+        </div>
+
+        <div class="card-image">
+            <a
+                href="{{ product.url }}">
+                <!-- image displayed 3x4 ratio, and croped from the center using img filter -->
+                <img src="{{ product.featured_image.src | img_url: '1200x900', crop: 'center' }}" alt="{{ product.featured_image.alt | escape }}">
+            </a>
+        </div>
     </div>
-
-    <div class="card-image">
-        <a
-            href="{{ product.url }}">
-            <!-- image displayed 3x4 ratio, and croped from the center using img filter -->
-            <img src="{{ product.featured_image.src | img_url: '1200x900', crop: 'center' }}" alt="{{ product.featured_image.alt | escape }}">
-        </a>
-    </div>
-
-
 </div>
