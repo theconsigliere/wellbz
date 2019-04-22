@@ -1,6 +1,7 @@
+<div class="text-white">
 {% if cart.item_count > 0 %}
 
-    <p>{{'cart.filled.title' | t }}</p>
+    <p class='ta-center' >{{'cart.filled.title' | t }}</p>
     <form action="/cart" method="post" novalidate>
 
         <div class="cart-lines">
@@ -19,6 +20,7 @@
 
     </form>
 {% else %}
-    <p class='cart-empty-text'>{{'cart.empty.title' | t }}</p>
+    <p class='ta-center cart-empty-text'>{{'cart.empty.title' | t }}</p>
     <a class="button" href="/">{{'cart.empty.button' | t }}</a>
 {% endif %}
+</div>

@@ -1,6 +1,6 @@
 // put your styles here
 $headline-font: "Georgia", serif;
-$text-font: "Helvetica Neue" sans-serif;
+$text-font: "San Francisco", sans-serif;
 
 $black: black;
 $white: white;
@@ -51,6 +51,24 @@ $type-book: 400;
   font-weight: $type-bold;
 }
 
+@mixin reset-input {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  width: auto;
+  margin: 0;
+  padding: 0;
+  line-height: normal;
+  -webkit-font-smoothing: inherit;
+  -moz-osx-font-smoothing: inherit;
+  -text-align: left;
+}
+
 //base
 
 * {
@@ -68,13 +86,13 @@ body {
 }
 
 body {
-  font-size: $type-body-med;
-  background-color: $background-color;
-  background-image: url("{{ "background.jpg" | asset_url }}");
   background-size: 100%;
   background-attachment: fixed;
   background-repeat: no-repeat;
   padding-top: $header-height + $offset-global;
+  font-size: $type-body-med;
+  background-color: $background-color;
+  background-image: url("{{ "background.jpg" | asset_url }}");
 }
 
 h1,
@@ -105,7 +123,9 @@ ol {
 h1,
 .h1,
 h2,
-.h2 {
+.h2,
+h3,
+.h3 {
   font-family: $headline-font;
   font-weight: $type-bold;
   color: $light-black;
@@ -121,6 +141,12 @@ h2,
 .h2 {
   font-size: $type-headline-med;
   line-height: $line-global * 2;
+}
+
+h3,
+.h3 {
+  font-size: $type-body-med;
+  line-height: $line-global;
 }
 
 h4 {
@@ -150,6 +176,14 @@ p {
 }
 
 //utility classes
+.visually-hidden {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  width: 1px;
+}
 
 .wrapper {
   padding-left: $offset-global;
@@ -210,6 +244,29 @@ p {
   }
 }
 
+button[type="submit"],
+.button {
+  @include reset-input;
+  width: 100%;
+  display: inline-block;
+  padding: $line-global;
+  text-align: center;
+  font-size: $type-body-med;
+  line-height: $line-global;
+  background: $gold;
+  color: $white;
+  transition: 0.8s all;
+
+  &:disabled {
+    opacity: 0.75;
+    cursor: not-allowed;
+    text-decoration: line-through;
+  }
+
+  &:not(:disabled):hover {
+    background: lighten($gold, 10%);
+  }
+}
 //header
 
 .header-global {
@@ -306,7 +363,7 @@ p {
     margin: 0 auto;
   }
 
-  p {
+  .product-description {
     margin-bottom: $line-global;
   }
 }
@@ -333,4 +390,153 @@ p {
       grid-row: 1;
     }
   }
+}
+
+//product page
+
+.product-image {
+  width: 100%;
+
+  img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+//add to cart form
+
+.option-row {
+  text-align: right;
+  padding: $line-global 0;
+  border-top: $standard-border-white;
+  @include flex-space-between;
+
+  &:last-child {
+    border-bottom: $standard-border-white;
+  }
+}
+
+.option-title {
+  color: $text-color-white;
+}
+
+.variant-radio {
+  @extend .visually-hidden;
+
+  & + label {
+    @include spaced-caps;
+    display: inline-block;
+    cursor: pointer;
+    padding: $line-global/5;
+    border: 1px solid transparent;
+    color: $text-color-light-white;
+  }
+
+  &:checked + label {
+    color: $white;
+    border: 1px solid $white;
+  }
+
+  &:disabled + label {
+    cursor: not-allowed;
+    text-decoration: line-through;
+    color: $text-color;
+  }
+}
+
+.quantity-button {
+  @include reset-input;
+  font-size: $line-global;
+  line-height: $line-global;
+  text-align: center;
+  font-weight: $type-bold;
+  color: $text-color-white;
+  width: $line-global;
+
+  &:disabled {
+    opacity: 0.5;
+  }
+
+  &:not(:disabled):hover {
+    color: $white;
+  }
+}
+
+.quantity-text {
+  font-size: $line-global;
+  display: inline-block;
+  text-align: center;
+  min-width: $line-global;
+  margin: 0 $line-global/2;
+}
+
+#add-to-cart-button {
+  margin-top: $line-global;
+}
+
+//cart page styles
+
+.cart-page-contents {
+  background: $light-black;
+  padding: $offset-global;
+  max-width: 380px;
+  margin: 0 auto;
+}
+
+// shared cart styles
+
+.cart-lines {
+  margin-top: $line-global;
+  border-top: $standard-border-white;
+  border-bottom: $standard-border-white;
+  padding: $line-global 0;
+}
+
+.cart-empty-text {
+  margin: ($line-global * 4) 0;
+}
+
+// line item styles
+
+.line-item {
+  @extend .text-white;
+  @include flex-space-between;
+
+  .line-image {
+    width: 80px;
+    position: relative;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .remove-line {
+    position: absolute;
+    width: $line-global;
+    height: $line-global;
+    top: -($line-global/2);
+    right: -($line-global/2);
+    display: block;
+    transition: 0.3s all;
+    opacity: 0;
+  }
+
+  &:hover {
+    .remove-line {
+      opacity: 1;
+    }
+  }
+
+  &:not(:first-child) {
+    margin-top: $line-global;
+  }
+}
+
+.subtotal-line {
+  @include flex-space-between;
+  padding: $line-global 0;
 }
