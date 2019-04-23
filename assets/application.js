@@ -56,25 +56,70 @@ $(document).ready(function() {
   //
 
   let onVariantRadioChange = function(event) {
-    let $radio = $(this),
-      $form = $radio.closest("form"),
-      max = $radio.attr("data-inventory-quantity"),
-      $quantity = $form.find(".js-quantity-field");
-    $addToCartButton = $form.find("#add-to-cart-button");
+      let $radio = $(this),
+        $form = $radio.closest("form"),
+        max = $radio.attr("data-inventory-quantity"),
+        $quantity = $form.find(".js-quantity-field");
+      $addToCartButton = $form.find("#add-to-cart-button");
 
-    // on change to radio button if addtocartbutton equals true, we do have  we turn on the add to cart button
-    if ($addToCartButton.prop("disabled") === true) {
-      $addToCartButton.prop("disabled", false);
-    }
+      // on change to radio button if addtocartbutton equals true, we do have  we turn on the add to cart button
+      if ($addToCartButton.prop("disabled") === true) {
+        $addToCartButton.prop("disabled", false);
+      }
 
-    //whenever our radio is changed we want to set the max of the quantity field to whatever the value of the data quantity is
-    $quantity.attr("max", max);
-    // if quantity value is  greater than the max, set the quantity value to the max and trigger a change event
-    // if we change value to 20 when we choose an option this will then become the highest value of the inventory ie 10
-    if (parseInt($quantity.val()) > max) {
-      $quantity.val(max).change();
-    }
-  };
+      //whenever our radio is changed we want to set the max of the quantity field to whatever the value of the data quantity is
+      $quantity.attr("max", max);
+      // if quantity value is  greater than the max, set the quantity value to the max and trigger a change event
+      // if we change value to 20 when we choose an option this will then become the highest value of the inventory ie 10
+      if (parseInt($quantity.val()) > max) {
+        $quantity.val(max).change();
+      }
+    },
+    onAddToCart = function(event) {
+      event.preventDefault();
+
+      $.ajax({
+        type: "POST",
+        url: "/cart/add.js",
+        data: $(this).serialize(),
+        dataType: "json",
+        success: onCartUpdated,
+        error: onError
+      });
+    },
+    onLineRemoved = function(event) {
+      event.preventDefault();
+      let $removeLink = $(this),
+        removeQuery = $removeLink.attr("href").split("change?")[1];
+
+      $.post("/cart/change.js", removeQuery, onCartUpdated, "json");
+    };
+  (onCartUpdated = function() {
+    // alert("cart is updated");
+    //
+    //
+    //
+    $.ajax({
+      type: "GET",
+      url: "/cart",
+      context: document.body,
+      success: function(context) {
+        let $dataCartContents = $(context).find(".js-cart-page-contents"),
+          dataCartHtml = $dataCartContents.html(),
+          dataCartItemCount = $dataCartContents.attr("data-cart-item-count"),
+          $miniCartContents = $(".js-mini-cart-contents"),
+          $cartItemCount = $(".js-cart-item-count");
+
+        $cartItemCount.text(dataCartItemCount);
+        $miniCartContents.html(dataCartHtml);
+      }
+    });
+  }),
+    (onError = function(XMLHttpRequest, textStatus) {
+      let data = XMLHttpRequest.responseJSON;
+      alert(data.status + " - " + data.message + ":" + data.description);
+    });
+
   //
   //
   //
@@ -84,4 +129,8 @@ $(document).ready(function() {
   $(document).on("change", ".js-quantity-field", onQuantityFieldChange);
 
   $(document).on("change", ".js-variant-radio", onVariantRadioChange);
+
+  $(document).on("submit", "#add-to-cart-form", onAddToCart);
+
+  $(document).on("click", "#mini-cart .js-remove-line", onLineRemoved);
 });
